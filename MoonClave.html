@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moonclave Hotel - Luxury Accommodation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #f59e0b;
+            --primary-dark: #d97706;
+            --secondary: #ea580c;
+            --dark: #171717;
+            --light: #fafafa;
+            --gray: #737373;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 1.25rem 0;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar.scrolled .logo {
+            color: var(--dark);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .nav-menu a {
+            color: var(--gray);
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #EBA62E;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: white;
+        }
+
+        .navbar.scrolled .btn-ghost {
+            color: var(--gray);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .navbar.scrolled .mobile-menu-btn {
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: zoomIn 1.5s ease-out;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.4), rgba(0,0,0,0.7));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 4vw, 6rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            margin-top: -20px;
+            font-size: clamp(1.125rem, 0vw, 1.5rem);
+            margin-bottom: 3rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.95;
+        }
+
+        .booking-widget {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .booking-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .form-group input {
+            padding: 0.875rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator-icon {
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        .scroll-indicator-dot {
+            width: 4px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 2px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background: linear-gradient(to bottom, white, #fafafa);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f5f5f5;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .feature-card.visible {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+
+        .feature-icon i {
+            font-size: 2rem;
+            color: var(--primary-dark);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Rooms Section */
+        .rooms {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f5f5f5;
+            transition: all 0.5s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .room-card.visible {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .room-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .room-image {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .room-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+
+        .room-card:hover .room-image img {
+            transform: scale(1.1);
+        }
+
+        .room-rating {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .room-rating i {
+            color: var(--primary);
+        }
+
+        .room-info {
+            padding: 1.5rem;
+        }
+
+        .room-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .room-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .room-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .room-feature i {
+            font-size: 1rem;
+        }
+
+        .room-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .room-price {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .room-price-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .room-price-value {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #383838;
+        }
+
+        .room-price-period {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+        }
+
+        /* Experience Section */
+        .experience {
+            padding: 6rem 0;
+            background: linear-gradient(to bottom, #fafafa, white);
+            overflow: hidden;
+        }
+
+        .experience-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .experience-images {
+            position: relative;
+        }
+
+        .experience-images::before {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            left: -2rem;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.4), rgba(254, 215, 170, 0.4));
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            position: relative;
+        }
+
+        .experience-image {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+        }
+
+        .experience-image:hover {
+            transform: translateY(-10px);
+        }
+
+        .experience-image:nth-child(2) {
+            margin-top: 3rem;
+        }
+
+        .experience-image img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+        }
+
+        .experience-text {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        .experience-text.visible {
+            animation: fadeInRight 0.8s ease-out forwards;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .experience-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .experience-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .experience-number {
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .experience-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-item p {
+            color: var(--gray);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 6rem 0;
+            background: var(--dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent);
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+
+        .testimonials::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(234, 88, 12, 0.1), transparent);
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .testimonial-card.visible {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-10px);
+        }
+
+        .quote-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars i {
+            color: var(--primary);
+        }
+
+        .testimonial-text {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-image {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .author-name {
+            font-weight: 600;
+        }
+
+        .author-role {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .testimonials-stats {
+            text-align: center;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+        }
+
+        .stats-avatars {
+            display: flex;
+            margin-left: -0.5rem;
+        }
+
+        .stats-avatars img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--dark);
+            object-fit: cover;
+            margin-left: -0.5rem;
+        }
+
+        .stats-text p:first-child {
+            font-weight: 600;
+        }
+
+        .stats-text p:last-child {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 5rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .contact-item i {
+            margin-top: 0.25rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(1.1);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu,
+            .nav-actions {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .booking-form {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="#" class="logo">
+                    <img src="Icon/MoonClaveLogo3.svg" alt="Logo">
+                    <span>MOONCLAVE</span>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="#rooms">Rooms</a></li>
+                    <li><a href="#amenities">Amenities</a></li>
+                    <li><a href="#dining">Dining</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="btn btn-ghost">
+                        <i class="fas fa-phone"></i> +1 (555) 123-4567
+                    </button>
+                    <a href="#book" class="btn btn-primary">Book Now</a>
+                </div>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80" alt="Moonclave Hotel">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>MOONCLAVE HOTEL</h1>
+                <p>Experience luxury and comfort in our elegantly designed rooms with exceptional service</p>
+                
+                
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-indicator-icon">
+                <div class="scroll-indicator-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="amenities">
+        <div class="container">
+            <div class="section-header">
+                <h2>Exceptional Amenities</h2>
+                <p>Everything you need for a perfect stay</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>Free Wi-Fi</h3>
+                    <p>High-speed internet throughout</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Free Parking</h3>
+                    <p>Complimentary valet service</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <h3>24/7 Room Service</h3>
+                    <p>Anytime, anywhere</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+              <i class="fas fa-snowflake"></i>
+                    </div>
+                    <h3>Air-conditioned</h3>
+                    <p>Cool and comfortable spaces</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-swimming-pool"></i>
+                    </div>
+                    <h3>Swimming Pool</h3>
+                    <p>Poolside relaxation area</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Fine Dining</h3>
+                    <p>Michelin-starred restaurant</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Spa & Wellness</h3>
+                    <p>Rejuvenate your senses</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>24/7 Security</h3>
+                    <p>Your safety is our priority</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="rooms" id="rooms">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Rooms & Premium Promo</h2>
+                <p>Thoughtfully designed spaces for your comfort</p>
+            </div>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <div class="room-image">
+                        <img src="https://images.unsplash.com/photo-1572177215152-32f247303126?w=800&q=80" alt="Deluxe Room">
+                        <div class="room-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <h3>Deluxe Room</h3>
+                        <div class="room-features">
+                            <div class="room-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>14.85 m²</span>
+                            </div>
+                            <div class="room-feature">
+                                <i class="fas fa-users"></i>
+                                <span>2 Guests</span>
+                            </div>
+                            <div class="room-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>1-2 beds</span>
+                            </div>
+                        </div>
+                        <div class="room-footer">
+                            <div class="room-price">
+                                <span class="room-price-label">From</span>
+                                <div class="room-price-value">
+                                    ₱1,329.00
+                                    <span class="room-price-period">/ 12 hrs</span>
+                                </div>
+                                  <div class="room-price-value">
+                                    ₱1,699.00
+                                    <span class="room-price-period">/ 12 hrs</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-image">
+                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" alt="Executive Suite">
+                        <div class="room-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <h3>Premium 1</h3>
+                        <div class="room-features">
+                            <div class="room-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>28.60 m²</span>
+                            </div>
+                            <div class="room-feature">
+                                <i class="fas fa-users"></i>
+                                <span>3 guests</span>
+                            </div>
+                            <div class="room-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>2-3 beds</span>
+                            </div>
+                        </div>
+                        <div class="room-footer">
+                            <div class="room-price">
+                                <span class="room-price-label">From</span>
+                                <div class="room-price-value">
+                                    ₱2,699.00
+                                    <span class="room-price-period">/ 12 hrs</span>
+                                </div>
+                                  <div class="room-price-value">
+                                    ₱3,399.00
+                                    <span class="room-price-period">/ 24 hrs</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-image">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80" alt="Presidential Suite">
+                        <div class="room-rating">
+                            <i class="fas fa-star"></i>
+                            <span>5.0</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <h3>Premium 2</h3>
+                        <div class="room-features">
+                            <div class="room-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>27.54 m²</span>
+                            </div>
+                            <div class="room-feature">
+                                <i class="fas fa-users"></i>
+                                <span>4 guests</span>
+                            </div>
+                            <div class="room-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>2-3 beds</span>
+                            </div>
+                        </div>
+                        <div class="room-footer">
+                            <div class="room-price">
+                                <span class="room-price-label">From</span>
+                                <div class="room-price-value">
+                                    ₱2,089.00
+                                    <span class="room-price-period">/ 12 hrs</span>
+                                </div>
+                                  <div class="room-price-value">
+                                    ₱2,499.00
+                                    <span class="room-price-period">/ 24 hrs</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="dining">
+        <div class="container">
+            <div class="experience-content">
+                <div class="experience-images">
+                    <div class="images-grid">
+                        <div class="experience-image">
+                            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80" alt="Pool">
+                        </div>
+                        <div class="experience-image">
+                            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Dining">
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-text">
+                    <div class="badge">THE MOONCLAVE EXPERIENCE</div>
+                    <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; margin-bottom: 1.5rem;">
+                        Redefining Hospitality
+                    </h2>
+                    <p style="font-size: 1.25rem; color: var(--gray); margin-bottom: 2rem; line-height: 1.8;">
+                        At Moonclave Hotel, every detail is crafted to perfection. From our infinity pool 
+                        overlooking the city to our award-winning restaurant, we offer experiences that 
+                        create lasting memories.
+                    </p>
+                    <ul class="experience-list">
+                        <li class="experience-item">
+                            <div class="experience-number">01</div>
+                            <div>
+                                <h3>Pool</h3>
+                                <p>Unwind in our stunning rooftop pool with panoramic city views</p>
+                            </div>
+                        </li>
+                        <li class="experience-item">
+                            <div class="experience-number">02</div>
+                            <div>
+                                <h3>Fine Dining Excellence</h3>
+                                <p>Savor culinary masterpieces prepared by world-class chefs</p>
+                            </div>
+                        </li>
+                        <li class="experience-item">
+                            <div class="experience-number">03</div>
+                            <div>
+                                <h3>Wellness & Spa</h3>
+                                <p>Rejuvenate with our comprehensive spa and wellness programs</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Guest Experiences</h2>
+                <p style="color: rgba(255, 255, 255, 0.6);">Hear what our guests have to say</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Absolutely stunning hotel! The attention to detail is remarkable. The staff went above and beyond to make my stay memorable. The rooftop pool is breathtaking."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" alt="Sarah Johnson" class="author-image">
+                        <div>
+                            <div class="author-name">Sarah Johnson</div>
+                            <div class="author-role">Business Traveler</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "The perfect blend of luxury and comfort. The rooms are spacious and beautifully designed. The restaurant exceeded all expectations. Will definitely return!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" alt="Michael Chen" class="author-image">
+                        <div>
+                            <div class="author-name">Michael Chen</div>
+                            <div class="author-role">Vacation Guest</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Our honeymoon was magical thanks to Moonclave. The presidential suite was beyond our dreams. Every moment was special, and the service was impeccable."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop" alt="Emma Williams" class="author-image">
+                        <div>
+                            <div class="author-name">Emma Williams</div>
+                            <div class="author-role">Honeymoon Suite</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonials-stats">
+                <div class="stats-badge">
+                    <div class="stats-avatars">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" alt="">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" alt="">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop" alt="">
+                    </div>
+                    <div class="stats-text">
+                        <p>500+ Happy Guests</p>
+                        <p>This month alone</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">
+                         <img src="Icon/MoonClaveLogo3.svg" alt="Logo">
+                        <span>MOONCLAVE</span>
+                    </div>
+                    <p class="footer-description">
+                        Experience luxury and comfort in our elegantly designed hotel.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Rooms & Suites</a></li>
+                        <li><a href="#">Amenities</a></li>
+                        <li><a href="#">Special Offers</a></li>
+                        <li><a href="#">Events</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>Contact Us</h4>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Little Baguio, 67 Rosal St, 2 Red-V, Lucena City, 4301 Quezon</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@moonclave.com</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Newsletter</h4>
+                    <p class="footer-description">Subscribe for exclusive offers and updates</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email" class="newsletter-input" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;">
+                    © 2026 Moonclave Hotel. All rights reserved.
+                </p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.feature-card, .room-card, .testimonial-card, .experience-text').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form submission
+        document.querySelector('.booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your booking request! We will contact you shortly.');
+        });
+
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            this.reset();
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
